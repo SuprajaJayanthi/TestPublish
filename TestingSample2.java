@@ -1,0 +1,1 @@
+TS6Verify secure and reliable payment execution 
