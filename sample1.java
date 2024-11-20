@@ -1,1 +1,0 @@
-Validation of Selected Plan and Card Token
