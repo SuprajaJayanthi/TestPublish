@@ -1,0 +1,1 @@
+Verify visual representation of data in reports
