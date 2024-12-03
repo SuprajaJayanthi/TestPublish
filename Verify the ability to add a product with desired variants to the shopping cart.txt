@@ -1,0 +1,46 @@
+import { cy, before, after } from 'cypress';
+import * as commands from 'cypress';
+import chai from 'chai';
+import lodash from 'lodash';
+import { Assert, List } from 'cypress';
+
+describe('Add Product with Variants to Cart', () => {
+  before(() => {
+    cy.log('Starting test suite');
+    // Perform any necessary setup actions
+  });
+
+  after(() => {
+    cy.log('Test suite completed');
+    // Perform any necessary cleanup actions
+  });
+
+  it('Verify adding product with variants to cart', () => {
+    cy.log('Starting test case: Verify adding product with variants to cart');
+
+    // 1. Navigate to the product page
+    cy.visit('/product-page');
+
+    // 2. Select the desired variant options (size, color, and quantity) for the product
+    cy.get('#product-size').select('Medium');
+    cy.get('#product-color').select('Red');
+    cy.get('#product-quantity').clear().type('2');
+
+    // 3. Verify that the selected variant is in stock
+    cy.get('#stock-status').should('contain', 'In Stock');
+
+    // 4. Click the "Add to Cart" button or perform the necessary action to add the product to the shopping cart
+    cy.get('#add-to-cart-btn').click();
+
+    // 5. Observe the shopping cart section or popup
+    cy.get('#cart-popup').should('be.visible');
+
+    // Verify that the product with the selected variants is added to the shopping cart
+    cy.get('#cart-items').should('contain', 'Product Name');
+    cy.get('#cart-items').should('contain', 'Size: Medium');
+    cy.get('#cart-items').should('contain', 'Color: Red');
+    cy.get('#cart-items').should('contain', 'Quantity: 2');
+
+    // Verify that the cart's total cost and item count are updated accurately
+    cy.get('#cart-total').should('contain', 'Total: $50.00');
+    cy.get('#cart-i
