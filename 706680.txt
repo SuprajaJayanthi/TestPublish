@@ -1,0 +1,56 @@
+import { cy, before, after } from 'cypress';
+import 'cypress-commands';
+import chai from 'chai';
+import lodash from 'lodash';
+import Assert from 'assert';
+import List from 'list';
+
+describe('Access and Verify Detailed Transaction Logs for Completed Fund Transfer', () => {
+  before(() => {
+    cy.log('Starting test suite: Access and Verify Detailed Transaction Logs');
+    cy.visit('https://transaction-management-system.com/login');
+    cy.log('Navigated to the login page');
+  })
+
+  after(() => {
+    cy.log('Completed test suite: Access and Verify Detailed Transaction Logs');
+  });
+
+  it('should log in as a compliance officer and verify transaction logs', () => {
+    cy.log('Test case: Log in as a compliance officer');
+    cy.get('#username').type('compliance_officer'); // Enter username
+    cy.get('#password').type('password123'); // Enter password
+    cy.get('#loginButton').click(); // Click login button
+    cy.log('Logged in successfully');
+
+    cy.log('Navigating to the transaction logs section');
+    cy.get('#transactionLogsMenu').click(); // Navigate to transaction logs
+    cy.log('Transaction logs section accessed');
+
+    cy.log('Searching for a specific completed fund transfer');
+    cy.get('#dateRangeFilter').type('2023-01-01 to 2023-12-31'); // Set date range
+    cy.get('#accountNumberFilter').type('123456789'); // Enter account number
+    cy.get('#searchButton').click(); // Click search button
+    cy.log('Search executed for completed fund transfer');
+
+    cy.log('Accessing the transaction log for the selected fund transfer');
+    cy.get('.transactionLogEntry').first().click(); // Access first transaction log entry
+    cy.log('Transaction log accessed');
+
+    cy.log('Verifying transaction log details');
+    cy.get('.transactionDate').should('contain', '2023-05-15'); // Verify date
+    cy.get('.transactionAmount').should('contain', '1000'); // Verify amount
+    cy.get('.sourceAccount').should('contain', '123456789'); // Verify source account
+    cy.get('.destinationAccount').should('contain', '987654321'); // Verify destination account
+    cy.get('.approverDetails').should('contain', 'John Doe'); // Verify approver details
+    cy.get('.statusUpdates').should('contain', 'Completed'); // Verify status updates
+    cy.log('Transaction log details verified');
+
+    cy.screenshot(); // Capture screenshot for visual evidence
+  });
+
+  cy.on('fail', (error, runnable) => {
+    cy.screenshot(); // Capture screenshot on failure
+    throw error; // Rethrow the error to fail the test
+  });
+});
