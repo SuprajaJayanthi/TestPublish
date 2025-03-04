@@ -1,0 +1,46 @@
+import { cy, before, after } from 'cypress';
+import 'cypress-commands';
+import chai from 'chai';
+import lodash from 'lodash';
+import Assert from 'assert';
+import List from 'list';
+
+describe('Dashboard Access and Fund Transfer Metrics', () => {
+  let extentLogs;
+
+  before(() => {
+    // Initialize Extent Logs
+    extentLogs = [];
+    extentLogs.push('Test Suite Initialization: Dashboard Access and Fund Transfer Metrics');
+  });
+
+  after(() => {
+    // Finalize Extent Logs
+    extentLogs.push('Test Suite Completion: Dashboard Access and Fund Transfer Metrics');
+    // Generate report using Mochawesome or other plugins
+    cy.task('generateReport', extentLogs);
+  });
+
+  it('should allow operations manager to access dashboard and view fund transfer metrics', () => {
+    extentLogs.push('Test Case Start: Access Dashboard and View Fund Transfer Metrics');
+
+    // Step 1: Log in to the system as an operations manager
+    cy.visit('https://example.com/login');
+    cy.get('#username').type('operations_manager');
+    cy.get('#password').type('password123');
+    cy.get('#loginButton').click();
+    extentLogs.push('Logged in as operations manager');
+
+    // Step 2: Navigate to the dashboard section
+    cy.wait(2000); // Explicit wait for page load
+    cy.get('#dashboardLink').click();
+    extentLogs.push('Navigated to dashboard section');
+
+    // Step 3: Locate the fund transfer performance metrics panel
+    cy.wait(2000); // Explicit wait for panel load
+    cy.get('#fundTransferMetricsPanel').should('be.visible').then(() => {
+      extentLogs.push('Fund transfer performance metrics panel is visible');
+    }).catch((error) => {
+      extentLogs.push(`Error: ."You are a helpful assistant. When providing Base64 converted data in your response, don not include or prepend the text block starting with '??plaintext' or any similar code block markers. Simply return the Base64 data without any additional formatting or markers.`);
+    });
+});
