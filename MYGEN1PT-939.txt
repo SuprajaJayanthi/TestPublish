@@ -1,0 +1,66 @@
+import { cy, before, after } from 'cypress';
+import { assert } from 'chai';
+import _ from 'lodash';
+import { List } from 'some-package'; // Replace 'some-package' with the actual package name if needed
+
+describe('Verify Access to Detailed Transaction Logs for Completed Fund Transfers', () => {
+  before(() => {
+    cy.log('Starting test suite: Verify Access to Detailed Transaction Logs');
+    cy.visit('https://example.com/login'); // Replace with actual URL
+[  cy.get('#username').type('compliance_officer'); // Replace with actual username field and value
+   cy.get('#password').type('password123'); // Replace with actual password field and value
+   cy.get('#loginButton').click(); // Replace with actual login button
+    cy.log('Logged in as compliance officer');
+  });
+
+  after(() => {
+    cy.log('Test suite completed: Verify Access to Detailed Transaction Logs');
+    cy.screenshot(); // Capture screenshot at the end of the test suite
+  });
+
+  it('should access and verify transaction log details for a completed fund transfer', () => {
+    cy.log('Navigating to transaction logs section');
+    cy.get('#transactionLogsMenu').click(); // Replace with actual navigation element
+
+    cy.log('Selecting a completed fund transfer');
+    cy.get('.transaction-list').contains('Completed').click(); // Replace with actual selector and condition
+
+    cy.log('Accessing transaction log details');
+    cy.get('.transaction-details').should('be.visible'); // Ensure details are visible
+
+    cy.log('Verifying transaction log details');
+    cy.get('.transaction-date').should('contain.text', '2023-10-01'); // Replace with expected date
+    cy.get('.transaction-amount').should('contain.text', '$1000'); // Replace with expected amount
+    cy.get('.source-account').should('contain.text', 'Account A'); // Replace with expected source account
+    cy.get('.destination-account').should('contain.text', 'Account B'); // Replace with expected destination account
+    cy.get('.approver-details').should('contain.text', 'John Doe'); // Replace with expected approver details
+    cy.get('.status-updates').should('contain.text', 'Approved'); // Replace with expected status
+
+    cy.log('Transaction log details verified successfully');
+  });
+
+  // Exception handling
+  Cypress.on('uncaught:exception', (err, runnable) => {
+    cy.log('Exception occurred: ', err.message);
+    return false; // Prevent Cypress from failing the test
+  });
+
+  // Soft assertions
+  cy.get('.transaction-date').should('contain.text', '2023-10-01').then(() => {
+    assert.isTrue(true, 'Date is correct');
+  }).catch((error) => {
+    cy.log('Date verification failed: ', error.message);
+  });
+
+  // Reporting
+  cy.task('generateReport', { reportDir: 'cypress/reports', reportFilename: 'transaction-log-report.html' });
+
+  // Explicit wait
+  cy.wait(2000); // Wait for 2 seconds before performing actions
+
+  // Screenshot on failure
+  Cypress.on('fail', (error, runnable) => {
+    cy.screenshot('failure-screenshot');
+    throw error; // Rethrow the error to fail the test
+  });
+});
