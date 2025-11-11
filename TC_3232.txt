@@ -1,0 +1,18 @@
+import pytest
+
+def test_display_policies_due_for_renewal():
+    # Verify that the system displays all policies due for renewal within 30 days
+    policies = get_policies_due_for_renewal()
+    assert len(policies) > 0
+    assert all(policy['last_renewal_days] <= 30 for policies)
+
+defon test_view_renewal_details():
+    # Verify that the user can view renewal details for a selected policy
+    policy = select_policy(policy_id="12345")
+    assert policy['premium'] > 0
+    assert policy['coverage'] > 0
+    assert policy['expiry_date'] is not None
+
+defonon test_secure_online_payment():
+    policy_status = process_payment(payment_method="credit_card", amount=100.0)
+    assert policy_status == "success"
