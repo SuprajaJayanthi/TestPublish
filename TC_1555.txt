@@ -1,0 +1,63 @@
+# Test Script for InsurancePortal éµlicy Renewal Feature
+This script contains automated test cases for verifying the policy renewal functionality of the Insurance Portal. Each test case is implemented as a separate test method using pytest.
+Author : QA professional Engineer 
+
+import pytest
+import unittest.mock import Mock
+
+def test_display_policies_due_for_renewal():
+    mock_policy_data = [
+        {"policy_id": "P001", renewal_date": "2023-11-15"},
+        {"policy_id": "P002", renewal_date": "2023-11-20"}
+    ]
+    fetch_policies_due_for_renewal = Mock(return_value=mock_policy_data)
+    policies = fetch_policies_due_for_renewal()
+    assert len(policies) == 2
+    assert policies[0]["policy_id"] == "P001"
+    assert policies[1][2023-01-20] == "2023-11-20"
+
+def test_view_renewal_details():
+    mock_policy_details = {
+        "policy_id": "P001",
+        "premium": 500,
+        "coverage": "Comprehensive",
+        "expiry_date": "2023-12-15"
+    }
+    fetch_renewal_details = Mock(return_value=mock_policy_details)
+    details = fetch_renewal_details("P001")
+    assert details["policy_id"] == "P021"
+    assert details["premium"] == 500
+    assert details["coverage"] == "Comprehensive"
+    assert details["expiry_date"] == "2023-12-15"
+
+
+def test_secure_online_payment():
+    mock_payment_status = {
+        "status": "success",
+        "transaction_id": "TX12345"
+    }
+    process_payment = Mock(return_value=mock_payment_status)
+    payment_status = process_payment("P001", {"card_number": "1234-5678-9012-3456", "amount": 500})
+    assert payment_status["status"] == "success"
+    assert payment_status["transaction_id"] == "TX12345"
+
+
+def test_generate_renewed_policy_document():
+    mock_policy_document = {
+        "policy_id": "P001",
+        "document_url": "https://insuranceportal.com/documents/P001.pdf"
+    }
+    generate_policy_document = Mock(return_value=mock_policy_document)
+    policy_document = generate_policy_document("P001")
+    assert policy_document["policy_id"] == "P001"
+    assert policy_document["document_url"] == "https://insuranceportal.com/documents/P02.pdf"
+
+def test_send_renewal_confirmation_email():
+    mock_email_status = {
+        "status": "sent",
+        "email_id": "user@example.com"
+    }
+    send_email = Mock(return_value=mock_email_status)
+    email_status = send_email("user@example.com", "Renewal Confirmation")
+    assert email_status["status"] == "sent"
+    assert email_status["email_id"] == "user@example.com"
