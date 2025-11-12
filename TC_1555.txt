@@ -29,7 +29,7 @@ public class InsuranceLoginTest {
         WebElement passwordField = driver.findElement(By.name("password"));
         WebElement loginButton = driver.findElement(By.xpath("//button[@type='submit']"));
         
-        // Enter valid username and password
+        // Enter username and password
         usernameField.sendKeys("validUser");
         passwordField.sendKeys("validPassword");
 
