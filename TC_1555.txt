@@ -1,63 +1,78 @@
-# Test Script for InsurancePortal éµlicy Renewal Feature
-This script contains automated test cases for verifying the policy renewal functionality of the Insurance Portal. Each test case is implemented as a separate test method using pytest.
-Author : QA professional Engineer 
+import org.junit.Before;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import static org.junit.Assert.*;
 
-import pytest
-import unittest.mock import Mock
+public class InsuranceLoginTest {
 
-def test_display_policies_due_for_renewal():
-    mock_policy_data = [
-        {"policy_id": "P001", renewal_date": "2023-11-15"},
-        {"policy_id": "P002", renewal_date": "2023-11-20"}
-    ]
-    fetch_policies_due_for_renewal = Mock(return_value=mock_policy_data)
-    policies = fetch_policies_due_for_renewal()
-    assert len(policies) == 2
-    assert policies[0]["policy_id"] == "P001"
-    assert policies[1][2023-01-20] == "2023-11-20"
+    private WebDriver driver;
 
-def test_view_renewal_details():
-    mock_policy_details = {
-        "policy_id": "P001",
-        "premium": 500,
-        "coverage": "Comprehensive",
-        "expiry_date": "2023-12-15"
+    @Before
+    public void setUp() {
+        // Set the path to the ChromeDriver executable
+        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+        
+        // Initialize WebDriver (using Chrome in this case)
+        driver = new ChromeDriver();
+        
+        // Navigate to the login page of the insurance application
+        driver.get("https://yourinsuranceapp.com/login");
     }
-    fetch_renewal_details = Mock(return_value=mock_policy_details)
-    details = fetch_renewal_details("P001")
-    assert details["policy_id"] == "P021"
-    assert details["premium"] == 500
-    assert details["coverage"] == "Comprehensive"
-    assert details["expiry_date"] == "2023-12-15"
 
+    @Test
+    public void testValidLogin() {
+        // Find username, password fields and login button
+        WebElement usernameField = driver.findElement(By.name("username"));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.xpath("//button[@type='submit']"));
+        
+        // Enter valid username and password
+        usernameField.sendKeys("validUser");
+        passwordField.sendKeys("validPassword");
 
-def test_secure_online_payment():
-    mock_payment_status = {
-        "status": "success",
-        "transaction_id": "TX12345"
+        // Click on the login button
+        loginButton.click();
+        
+        // Wait for the page to load and check if redirected to the dashboard
+        // You can use an explicit wait if necessary, for example:
+        // WebDriverWait wait = new WebDriverWait(driver, 10);
+        // wait.until(ExpectedConditions.urlContains("/dashboard"));
+
+        // Verify that the dashboard page is displayed
+        String currentUrl = driver.getCurrentUrl();
+        assertTrue("User is not redirected to the dashboard", currentUrl.contains("/dashboard"));
+        
+        // Optionally check if a specific dashboard element is visible (e.g., welcome message)
+        WebElement welcomeMessage = driver.findElement(By.className("dashboard-welcome-message"));
+        assertTrue("Dashboard welcome message not found", welcomeMessage.isDisplayed());
     }
-    process_payment = Mock(return_value=mock_payment_status)
-    payment_status = process_payment("P001", {"card_number": "1234-5678-9012-3456", "amount": 500})
-    assert payment_status["status"] == "success"
-    assert payment_status["transaction_id"] == "TX12345"
 
+    @Test
+    public void testInvalidLogin() {
+        // Find username, password fields and login button
+        WebElement usernameField = driver.findElement(By.name("username"));
+        WebElement passwordField = driver.findElement(By.name("password"));
+        WebElement loginButton = driver.findElement(By.xpath("//button[@type='submit']"));
+        
+        // Enter invalid username and password
+        usernameField.sendKeys("invalidUser");
+        passwordField.sendKeys("invalidPass");
 
-def test_generate_renewed_policy_document():
-    mock_policy_document = {
-        "policy_id": "P001",
-        "document_url": "https://insuranceportal.com/documents/P001.pdf"
+        // Click on the login button
+        loginButton.click();
+        
+        // Check if an error message is displayed
+        WebElement errorMessage = driver.findElement(By.className("error-message"));
+        assertTrue("Error message not displayed", errorMessage.isDisplayed());
+        assertEquals("Invalid username or password", errorMessage.getText());
     }
-    generate_policy_document = Mock(return_value=mock_policy_document)
-    policy_document = generate_policy_document("P001")
-    assert policy_document["policy_id"] == "P001"
-    assert policy_document["document_url"] == "https://insuranceportal.com/documents/P02.pdf"
 
-def test_send_renewal_confirmation_email():
-    mock_email_status = {
-        "status": "sent",
-        "email_id": "user@example.com"
+    @org.junit.After
+    public void tearDown() {
+        // Close the browser window
+        driver.quit();
     }
-    send_email = Mock(return_value=mock_email_status)
-    email_status = send_email("user@example.com", "Renewal Confirmation")
-    assert email_status["status"] == "sent"
-    assert email_status["email_id"] == "user@example.com"
+}
